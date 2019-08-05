@@ -15,6 +15,10 @@ declare module '@dojot/dojot-module' {
         public getTenants(auth: string): Promise<any>;
     }
 
+    class Ocsp {
+        public sendRequest(url:string, mycert:string, cacert:string, cn:string): Promise<any>;
+    }
+
     interface Config {
         kafka: {
             consumer: any,

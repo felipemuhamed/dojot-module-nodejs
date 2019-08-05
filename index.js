@@ -4,4 +4,5 @@ module.exports = {
     Messenger: require("./lib/messenger").Messenger,
     Config: require("./lib/config"),
     Auth: require("./lib/auth"),
+    Ocsp: require("./lib/ocsp")
 };
