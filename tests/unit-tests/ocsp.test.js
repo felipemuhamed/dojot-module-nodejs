@@ -37,7 +37,7 @@ describe("Testing OCSP module", () => {
             const ocsp = new OCSPRequester.OCSPRequester();
             ocsp._createClientCRT = jest.fn(() => { return Promise.resolve('test') });
 
-            ocsp.sendRequest('test', 'test', 'test', 'test').catch((e) => {
+            ocsp.sendRequest('test', 'test', 'test', 'test').then((e) => {
                 expect(e).toBe(false);
 
             });
@@ -64,31 +64,31 @@ describe("Testing OCSP module", () => {
     });
 
     describe("When saving a file", () => {
-        it('returns true if file saved', async () => {
+        it('returns true if file saved', () => {
 
-            const fs = require('fs').promises;
-
-            fs.writeFile = jest.fn(() => { return Promise.resolve(true) });
-
+            const fs = require('fs');
+            fs.writeFile = jest.fn((arg0, arg1, callback) => callback(null, 'data'))
 
             const OCSPRequester = require('../../lib/ocsp.js');
 
             const ocsp = new OCSPRequester.OCSPRequester();
 
 
-            const result = await ocsp._createClientCRT('test', 'test');
+            ocsp._createClientCRT('test', 'test').then((data) => {
+                expect(data).toBe('data');
 
-            expect(result).toBe(true);
+            })
+
         });
 
     });
 
     describe("When saving a file", () => {
-        it('returns false when reading a file', async () => {
+        it('returns false when have an error reading a file', () => {
 
-            const fs = require('fs').promises;
+            const fs = require('fs');
 
-            fs.writeFile = jest.fn(() => { return Promise.reject(false) });
+            fs.writeFile = jest.fn((arg0, arg1, callback) => callback("err", null))
 
 
             const OCSPRequester = require('../../lib/ocsp.js');
@@ -96,9 +96,10 @@ describe("Testing OCSP module", () => {
             const ocsp = new OCSPRequester.OCSPRequester();
 
 
-            const result = await ocsp._createClientCRT('test', 'test');
+            ocsp._createClientCRT('test', 'test').catch((err) => {
+                expect(err).toBe("err");
 
-            expect(result).toBe(false);
+            })
         });
 
     });
