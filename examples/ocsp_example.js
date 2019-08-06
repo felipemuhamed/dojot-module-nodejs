@@ -1,6 +1,6 @@
 "use strict";
 
-const OCSPRequester = require('../lib/index.js');
+const OCSPRequester = require('../lib/ocsp.js');
 
 let mycert = 'insert here your client.crt PEM...';
 let cacert = 'insert here your ca.crt directory';
