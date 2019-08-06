@@ -1,6 +1,9 @@
 "use strict";
-
+var logger = require("@dojot/dojot-module-logger").logger;
 const OCSPRequester = require('../lib/ocsp.js');
+
+const TAG = { filename: "ocsp_example" };
+
 
 let mycert = 'insert here your client.crt PEM...';
 let cacert = 'insert here your ca.crt directory';
@@ -14,14 +17,14 @@ const ocsp = new OCSPRequester.OCSPRequester();
 ocsp.sendRequest(url, mycert, cacert, cn, path).then((isAuth) => {
     if (isAuth) {
         /* The client is authorized */
-        console.log('Authorized');
+        logger.info('Authorized', TAG);
     }
     else {
         /* The client is not authorized */
 
-        console.log('Not authorized');
+        logger.info('Not authorized', TAG);
     }
 }).catch((err) => {
     /* Internal error.. maybe some parameters errors*/
-    console.log(err);
+    logger.error(err, TAG);
 });
