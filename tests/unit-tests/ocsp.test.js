@@ -16,9 +16,6 @@ describe("Testing OCSP module", () => {
 
             const ocsp = new OCSPRequester.OCSPRequester();
 
-            /* mocking createClientCRT */
-            ocsp._createClientCRT = jest.fn(() => { return Promise.resolve('test') });
-
             const result = await ocsp.sendRequest('test', 'test', 'test', 'test');
 
             expect(result).toBe(true);
@@ -35,7 +32,6 @@ describe("Testing OCSP module", () => {
             const OCSPRequester = require('../../lib/ocsp.js');
 
             const ocsp = new OCSPRequester.OCSPRequester();
-            ocsp._createClientCRT = jest.fn(() => { return Promise.resolve('test') });
 
             ocsp.sendRequest('test', 'test', 'test', 'test').then((e) => {
                 expect(e).toBe(false);
@@ -47,59 +43,17 @@ describe("Testing OCSP module", () => {
     });
 
     describe("When an OCSP request was sent", () => {
-        it('returns false if cant read correctly the input', () => {
+        it('returns Parameters error if cant read correctly the input', () => {
 
             const OCSPRequester = require('../../lib/ocsp.js');
 
             const ocsp = new OCSPRequester.OCSPRequester();
-            ocsp._createClientCRT = jest.fn(() => { return Promise.reject(false) });
 
-            ocsp.sendRequest('test', 'test', 'test', 'test').catch((e) => {
-                expect(e).toBe(false);
+            ocsp.sendRequest('test', 'test').catch((e) => {
+                expect(e).toBe("Parameters error");
 
             });
 
-        });
-
-    });
-
-    describe("When saving a file", () => {
-        it('returns true if file saved', () => {
-
-            const fs = require('fs');
-            fs.writeFile = jest.fn((arg0, arg1, callback) => callback(null, 'data'))
-
-            const OCSPRequester = require('../../lib/ocsp.js');
-
-            const ocsp = new OCSPRequester.OCSPRequester();
-
-
-            ocsp._createClientCRT('test', 'test').then((data) => {
-                expect(data).toBe('data');
-
-            })
-
-        });
-
-    });
-
-    describe("When saving a file", () => {
-        it('returns false when have an error reading a file', () => {
-
-            const fs = require('fs');
-
-            fs.writeFile = jest.fn((arg0, arg1, callback) => callback("err", null))
-
-
-            const OCSPRequester = require('../../lib/ocsp.js');
-
-            const ocsp = new OCSPRequester.OCSPRequester();
-
-
-            ocsp._createClientCRT('test', 'test').catch((err) => {
-                expect(err).toBe("err");
-
-            })
         });
 
     });
