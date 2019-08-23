@@ -154,3 +154,40 @@ export DOJOT_SUBJECT_DEVICES = "dojot.device-manager.device"
 export DOJOT_SUBJECT_DEVICE_DATA = "device-data"
 ```
 
+## Dojot OCSP Client
+
+This Dojot OCSP client was built-in using the OpenSSL library. the idea of this library is to provide a full client that will make OCSP requests to an OCSP server  in order to check the revocation status of its digital certificate. The use of this dojot OCSP is quite simple, where one only need to pass the provider URL, the one digital certificate, the trusted root CA certificate and the one CN to the OCSP provider. A simple example to understand the use its showed bellow:
+
+```javascript
+
+// Importing the dojot lib
+var dojot = require("@dojot/dojot-module");
+
+
+// Creating the client
+const ocsp = new dojot.Ocsp();
+
+// The data to be used in the request
+let mycert = 'insert here your client.crt PEM...';
+let cacert = 'insert here your ca.crt directory';
+let url = 'insert here the url of your oscp provider\
+           (example: http://172.18.0.2:8080/ejbca/publicweb/status/ocsp)...';
+let cn = 'insert here the CN of your client...';
+
+// here is the called request
+ocsp.sendRequest(url, mycert, cacert, cn).then((isAuth) => {
+    if (isAuth) {
+        /* The client is authorized */
+        logger.info('Authorized', TAG);
+    }
+    else {
+        /* The client is not authorized */
+
+        logger.info('Not authorized', TAG);
+    }
+}).catch((err) => {
+    /* Internal error.. maybe some parameters errors*/
+    logger.error(err, TAG);
+});
+
+```
