@@ -16,7 +16,7 @@ declare module '@dojot/dojot-module' {
     }
 
     class Ocsp {
-        public sendRequest(url:string, mycert:string, cacert:string, cn:string, clientPath:string): Promise<any>;
+        public sendRequest(url:string, mycert:string, cacert:string, cn:string): Promise<any>;
     }
 
     interface Config {
